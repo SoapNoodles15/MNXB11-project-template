@@ -2,9 +2,12 @@ CXX := g++
 CXXWARNINGS := -Wall -Wextra -Werror
 CXXOPT := -O3
 CXXSTD := -std=c++17
-INCLUDES := -I include
+INCLUDES := -I include -I /project/external/include
+LIBDIRS := -L /project/external/lib -L /project/external/lib64
+LIBS := -lmylib 
+
 CXXFLAGS := $(CXXWARNINGS) $(CXXSTD) $(CXXOPT) $(INCLUDES)
-LDFLAGS :=
+LDFLAGS :=$(LIBDIRS) $(LIBS)
 
 .PHONY: all clean
 
