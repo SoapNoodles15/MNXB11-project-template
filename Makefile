@@ -7,6 +7,10 @@ INCLUDES := -I include -I external/include -I external/include/date/
 LIBDIRS := -L /project/external/lib -L /project/external/lib64
 LDFLAGS := $(LIBDIRS) 
 
+INCLUDES := -I include -I external/include 
+LIBDIRS := -L /project/external/lib -L /project/external/lib64
+LDFLAGS := $(LIBDIRS) 
+
 CXXFLAGS := $(CXXWARNINGS) $(CXXSTD) $(CXXOPT) $(INCLUDES)
 
 .PHONY: all clean
@@ -25,3 +29,4 @@ src/%.o: src/%.cxx
 
 clean:
 	rm -v src/*.o main
+

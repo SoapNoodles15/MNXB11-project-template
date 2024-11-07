@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include "CLI.hpp"
+#include "csv.hpp"  // Vince's CSV parser
 
 
 int main(int argc, char **argv) {
@@ -12,19 +13,31 @@ int main(int argc, char **argv) {
        ->required()
        ->type_name("FILE");
 
+   
     CLI11_PARSE(app, argc, argv);
 
-    std::ifstream file(filename);
-    if (!file.is_open()) {
-        std::cerr << "Error: Could not open the file " << filename << std::endl;
+    try {
+        
+        csv::CSVReader reader(filename);
+
+        
+        for (csv::CSVRow& row : reader) {
+            
+            int day = row["day"].get<int>();
+            int year = row["year"].get<int>();
+            int month = row["month"].get<int>();
+            double measurement = row["measurement"].get<double>();
+
+        std::cout   <<"Day" << day
+                    <<",Year" << year
+                    <<",Month" << month
+                    <<",Measurment" << measurement << std::endl;
+            
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "Error reading CSV file: " << e.what() << std::endl;
         return 1;
     }
 
-    std::cout << "Reading CSV file: " << filename << std::endl;
-    
-    file.close();
-
-
     return 0;
 }
-
