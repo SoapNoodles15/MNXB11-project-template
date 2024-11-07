@@ -1,40 +1,43 @@
-
 #include <iostream>
+#include <fstream>
 #include <string>
-#include <CLI.hpp>
+#include "CLI.hpp"
+#include "csv.hpp"  // Vince's CSV parser
 
-int main(int argc, char *argv[]) {
-    std::cout << "Hello"
-                 "There"
-              << std::endl;
 
-    // Create a CLI app
-    CLI::App app{"CSV Reader"};
+int main(int argc, char **argv) {
+    CLI::App app{"CSV File Reader"};
 
-    // Variable to hold the input file name
-    std::string input_file;
+    std::string filename;
+    app.add_option("-i,--input-file", filename, "CSV file to read")
+       ->required()
+       ->type_name("FILE");
 
-    // Define command line argument for input file
-    app.add_option("-i,--input-file", input_file, "Path to the CSV file to read")->required();
-
-    // Parse the command line arguments
+   
     CLI11_PARSE(app, argc, argv);
 
-    // Print the number of command line arguments and the first argument
-    std::cout << "We were passed " << argc
-              << " command line arguments, the first of which was " << argv[0]
-              << std::endl;
+    try {
+        
+        csv::CSVReader reader(filename);
 
-    // Print the input file name
-    std::cout << "Input CSV file: " << input_file << std::endl;
+        
+        for (csv::CSVRow& row : reader) {
+            
+            int day = row["day"].get<int>();
+            int year = row["year"].get<int>();
+            int month = row["month"].get<int>();
+            double measurement = row["measurement"].get<double>();
 
-    std::cout << "With a good CLI library, we could use the command line "
-                 "arguments to make a useful program."
-              << std::endl;
-
-    // Here you would add your logic to read and process the CSV file
-    // Example: read_csv(input_file);
+        std::cout   <<"Day" << day
+                    <<",Year" << year
+                    <<",Month" << month
+                    <<",Measurment" << measurement << std::endl;
+            
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "Error reading CSV file: " << e.what() << std::endl;
+        return 1;
+    }
 
     return 0;
 }
-
