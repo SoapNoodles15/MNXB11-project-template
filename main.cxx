@@ -1,15 +1,28 @@
-
 #include <iostream>
-int main(int argc, char *argv[]) {
-  std::cout << "I am just a code template, you need to implement the "
-               "functionality you want to use yourself!"
-            << std::endl;
+#include <fstream>
+#include <string>
+#include "CLI.hpp"
 
-  std::cout << "We were passed " << argc
-            << " command line arguments, the first of which was " << argv[0]
-            << std::endl;
-  std::cout << "With a good CLI library, we could use the command line "
-               "arguments to make a useful program."
-            << std::endl;
-  return 0;
+
+int main(int argc, char **argv) {
+    CLI::App app{"CSV File Reader"};
+
+    std::string filename;
+    app.add_option("-i,--input-file", filename, "CSV file to read")
+       ->required()
+       ->type_name("FILE");
+
+    CLI11_PARSE(app, argc, argv);
+
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        std::cerr << "Error: Could not open the file " << filename << std::endl;
+        return 1;
+    }
+
+    std::cout << "Reading CSV file: " << filename << std::endl;
+    
+    file.close();
+
+    return 0;
 }
