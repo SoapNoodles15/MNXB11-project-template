@@ -3,9 +3,13 @@
 #include <string>
 #include "CLI.hpp"
 #include "csv.hpp"         // Vince's CSV parser
-#include "date.h"          // Howard Hinnant's Date library
+#include "date.h"   
+#include <fmt/chrono.h>   
 
 int main(int argc, char **argv) {
+    auto now = std::chrono::system_clock::now();
+    fmt::print("Program ran at : {}\n", now);
+    fmt::print("{:%H:%M}\n", now);
     CLI::App app{"CSV File Reader"};
     std::string filename;
     app.add_option("-i,--input-file", filename, "CSV file to read")
@@ -45,6 +49,7 @@ int main(int argc, char **argv) {
 
             std::cout << "Date: " << ymd << " (" << weekday << "), "
                       << "Measurement: " << measurement << std::endl;
+
         }
     } catch (const std::exception& e) {
         std::cerr << "Error reading CSV file: " << e.what() << std::endl;

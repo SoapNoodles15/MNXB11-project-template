@@ -6,9 +6,9 @@ CXXSTD := -std=c++17
 ROOTLIBS := $(shell root-config --glibs)
 
 
-INCLUDES := -I include -I external/include -I external/include/date/ -I$(shell root-config --incdir)
-LIBDIRS := -L /project/external/lib -L /project/external/lib64
-LDFLAGS := $(LIBDIRS) $(ROOTLIBS)
+INCLUDES := -I include -I external/include -I external/include/fmt -I external/include/date/ -I$(shell root-config --incdir)
+LIBDIRS := -L external/lib64
+LDFLAGS := $(LIBDIRS) $(ROOTLIBS) -lfmt
 
 CXXFLAGS := $(CXXWARNINGS) $(CXXSTD) $(CXXOPT) $(INCLUDES)
 
